@@ -1,46 +1,55 @@
 name: Build iOS IPA for Sideloadly
-
 on:
-  workflow_dispatch:
+  workflow_dispatch: # 手動実行ボタンを有効化
 
 jobs:
   build:
     runs-on: macos-latest
+
     steps:
-      - name: リポジトリのコードを取得
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Node.jsのセットアップ
-        uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 20
 
-      - name: パッケージのインストール
+      - name: Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
         run: npm install
 
-      - name: 【重要】Expo Prebuild（ここでiosフォルダを錬成）
-        run: npx expo prebuild --platform ios --clean
-
-      - name: 署名なしIPAのビルド（Sideloadly用）
+      - name: Prebuild (Convert to Native Project)
+        run: npx expo prebuild --platform ios
+      - name: Build Unsigned IPA with Xcode
         run: |
-          cd ios
-          # 自動生成されたワークスペース名を確実に取得するロジック
-          WORKSPACE_NAME=$(ls | grep '\.xcworkspace$' | head -n 1)
-          SCHEME_NAME=$(basename "$WORKSPACE_NAME" .xcworkspace)
-          
-          echo "Found workspace: $WORKSPACE_NAME"
-          echo "Found scheme: $SCHEME_NAME"
-          
-          # Xcodeビルド実行（署名なし設定）
-          xcodebuild -workspace "$WORKSPACE_NAME" -scheme "$SCHEME_NAME" -configuration Release -sdk iphoneos -archivePath ./build/app.xcarchive archive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
-          
-          # ビルドされたアプリを .ipa 形式にパッケージング
-          mkdir -p Payload
-          cp -r ./build/app.xcarchive/Products/Applications/*.app Payload/
-          zip -r ../app.ipa Payload
+          # ワークスペース名を取得
+          PROJECT_NAME=$(ls ios | grep .xcworkspace | sed 's/\.xcworkspace//')
+          echo "Found project: $PROJECT_NAME"
 
-      - name: 完成品（IPA）のアップロード
+          # 実機用(iphoneos)としてアーカイブ作成（署名なし）
+          xcodebuild -workspace "./ios/$PROJECT_NAME.xcworkspace" \
+            -scheme "$PROJECT_NAME" \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath "./build/$PROJECT_NAME.xcarchive" \
+            archive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
+
+          # Payloadフォルダを作ってIPA化
+          mkdir Payload
+          cp -r "./build/$PROJECT_NAME.xcarchive/Products/Applications/$PROJECT_NAME.app" ./Payload/
+          zip -r DIRECTORY_NAME.ipa Payload
+
+      - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
-          name: TreAla-IPA
-          path: app.ipa
+          name: DIRECTORY_NAME-IPA
+          path: DIRECTORY_NAME.ipa
