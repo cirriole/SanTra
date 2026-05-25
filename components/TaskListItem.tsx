@@ -54,43 +54,20 @@ export default function TaskListItem({
     );
   };
 
-  const renderRightActions = (
-    progress: Animated.AnimatedInterpolation<number>,
-    dragX: Animated.AnimatedInterpolation<number>
-  ) => {
-    const scale = dragX.interpolate({
-      inputRange: [-80, 0],
-      outputRange: [1, 0],
-      extrapolate: 'clamp',
-    });
-    return (
-      <View style={styles.swipeDeleteAction}>
-        <Animated.View style={{ transform: [{ scale }] }}>
-          <Ionicons name="trash-outline" size={24} color="#fff" />
-        </Animated.View>
-      </View>
-    );
-  };
 
   return (
     <Swipeable
       ref={swipeableRef}
       renderLeftActions={renderLeftActions}
-      renderRightActions={renderRightActions}
       onSwipeableWillOpen={(direction) => {
         if (direction === 'left') {
           onComplete();
-          swipeableRef.current?.close();
-        } else if (direction === 'right') {
-          onDelete();
           swipeableRef.current?.close();
         }
       }}
       friction={1}
       overshootFriction={8}
       leftThreshold={80}
-      rightThreshold={80}
-      overshootRight={false}
       overshootLeft={false}
     >
       <Pressable onPress={onPress} style={styles.card}>

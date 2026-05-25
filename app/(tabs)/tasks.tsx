@@ -136,6 +136,7 @@ export default function TasksScreen() {
 
       {/* タスクリスト */}
       <FlatList
+        style={{ flex: 1 }}
         data={tasks}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}

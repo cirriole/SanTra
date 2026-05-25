@@ -105,11 +105,16 @@ export default function HomeScreen() {
           <View style={styles.headerTextContainer}>
             <Text style={styles.greeting}>今日やることは3つだけ</Text>
             {Platform.OS === 'web' ? (
-              <Text style={[styles.heroTitle, { color: colors.primary }]}>Tri Do</Text>
+              <Text style={[styles.heroTitle, {
+                backgroundImage: 'linear-gradient(135deg, #FF5252 0%, #FF7A00 50%, #FFD600 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                color: 'transparent'
+              } as any]}>サンタス</Text>
             ) : (
               <MaskedView
                 style={styles.heroMaskedView}
-                maskElement={<Text style={styles.heroTitle}>Tri Do</Text>}
+                maskElement={<Text style={styles.heroTitle}>サンタス</Text>}
               >
                 <LinearGradient
                   colors={['#FF5252', '#FF7A00', '#FFD600']}
@@ -249,12 +254,12 @@ const createStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.create
     marginLeft: 0,
   },
   heroMaskedView: {
-    height: 60,
-    width: 200, // Increased
+    height: 65,
+    width: 260, // Increased to fit Dela Gothic One
   },
   heroTitle: {
-    fontFamily: 'Poppins_800ExtraBold',
-    fontSize: 42,
+    fontFamily: 'DelaGothicOne_400Regular',
+    fontSize: 48,
     color: colors.textPrimary,
     letterSpacing: -1,
   },

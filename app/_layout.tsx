@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useFonts, Poppins_800ExtraBold } from '@expo-google-fonts/poppins';
+import { DelaGothicOne_400Regular } from '@expo-google-fonts/dela-gothic-one';
 
 import { TaskProvider } from '@/contexts/TaskContext';
 import { ThemeProvider as AppThemeProvider, useTheme } from '@/contexts/ThemeContext';
@@ -58,6 +59,7 @@ function RootLayoutNav() {
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     Poppins_800ExtraBold,
+    DelaGothicOne_400Regular,
   });
 
   if (!fontsLoaded) {
