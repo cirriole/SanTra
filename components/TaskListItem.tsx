@@ -88,7 +88,7 @@ export default function TaskListItem({
           ]}
         >
           {isCompleted && (
-            <Ionicons name="checkmark-sharp" size={22} color={colors.surface} />
+            <Ionicons name="checkmark-sharp" size={20} color={colors.surface} />
           )}
         </View>
       </Pressable>
@@ -157,8 +157,8 @@ const createStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.create
     marginRight: Spacing.md,
   },
   checkCircle: {
-    width: 32,
-    height: 32,
+    width: 28,
+    height: 28,
     borderRadius: 6, // More rectangular
     borderWidth: 2,
     borderColor: colors.border,

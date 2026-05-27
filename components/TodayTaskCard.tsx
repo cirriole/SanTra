@@ -168,7 +168,7 @@ export default function TodayTaskCard({
             >
               <Ionicons
                 name="checkmark-sharp"
-                size={28}
+                size={24}
                 color={isCompleted ? colors.surface : 'transparent'}
               />
             </Animated.View>
@@ -227,8 +227,8 @@ const createStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.create
     color: colors.textSecondary,
   },
   checkButton: {
-    width: 52,
-    height: 52,
+    width: 42,
+    height: 42,
     borderRadius: 8, // More rectangular
     borderWidth: 2.5,
     justifyContent: 'center',

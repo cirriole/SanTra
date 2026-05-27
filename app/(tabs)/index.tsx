@@ -52,6 +52,8 @@ export default function HomeScreen() {
     return Math.max(0, hours);
   }, [refreshing]);
 
+  const timeRatio = useMemo(() => Math.max(0, Math.min(1, hoursRemaining / 24)), [hoursRemaining]);
+
   const handleComplete = useCallback(
     (id: string) => {
       const task = tasks.find((t) => t.id === id);
@@ -126,7 +128,14 @@ export default function HomeScreen() {
             )}
           </View>
           <View style={styles.headerRight}>
-            <View style={styles.timeBadge}>
+            <View style={styles.timeBadgeContainer}>
+              <LinearGradient
+                colors={['#4CD964', colors.primary, colors.border, colors.border]}
+                locations={[0, timeRatio, timeRatio, 1]}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 0, y: 0 }}
+                style={styles.timeBadgeLine}
+              />
               <Text style={styles.timeBadgeText}>残り {hoursRemaining}時間</Text>
             </View>
           </View>
@@ -245,6 +254,7 @@ const createStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.create
     marginBottom: Spacing.xxl,
   },
   headerTextContainer: {
+    flex: 1,
     alignItems: 'flex-start',
   },
   greeting: {
@@ -255,7 +265,8 @@ const createStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.create
   },
   heroMaskedView: {
     height: 65,
-    width: 260, // Increased to fit Dela Gothic One
+    width: '100%',
+    maxWidth: 260,
   },
   heroTitle: {
     fontFamily: 'DelaGothicOne_400Regular',
@@ -268,13 +279,19 @@ const createStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.create
   },
   headerRight: {
     alignItems: 'flex-end',
+    flexShrink: 0,
     gap: Spacing.sm,
   },
 
-  timeBadge: {
+  timeBadgeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+  },
+  timeBadgeLine: {
+    width: 4,
+    height: 32,
+    borderRadius: 2,
+    marginRight: Spacing.md,
   },
   timeBadgeText: {
     ...Typography.bodyBold,

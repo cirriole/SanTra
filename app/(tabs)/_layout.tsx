@@ -9,12 +9,12 @@ import { Shadows } from '@/constants/theme';
 import TodayScreen from './index';
 import TasksScreen from './tasks';
 import ReviewScreen from './review';
-import PagerView from 'react-native-pager-view';
+import CustomPager from '@/components/CustomPager';
 import { useRef, useState } from 'react';
 
 export default function TabLayout() {
   const { colors, isDark } = useTheme();
-  const pagerRef = useRef<PagerView>(null);
+  const pagerRef = useRef<any>(null);
   const [activeTab, setActiveTab] = useState(0);
 
   const tabs = [
@@ -25,11 +25,11 @@ export default function TabLayout() {
 
   return (
     <View style={{ flex: 1 }}>
-      <PagerView
+      <CustomPager
         ref={pagerRef}
         style={{ flex: 1 }}
         initialPage={0}
-        onPageSelected={(e) => setActiveTab(e.nativeEvent.position)}
+        onPageSelected={(e: any) => setActiveTab(e.nativeEvent.position)}
       >
         <View key="1">
           <TodayScreen />
@@ -40,7 +40,7 @@ export default function TabLayout() {
         <View key="3">
           <ReviewScreen />
         </View>
-      </PagerView>
+      </CustomPager>
 
       {/* Custom Tab Bar */}
       <View style={styles.tabBarContainer}>
